@@ -32,9 +32,10 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class       	  instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",     	  NULL,       NULL,       0,            0,           -1 },
+	{ "Firefox",  	  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Pavucontrol",  NULL,       NULL,       0,       	1,           -1 },
 };
 
 /* layout(s) */
@@ -65,14 +66,22 @@ static const Layout layouts[] = {
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
+static const char *printcmd[] = {"gscreenshot", "-c", "-s", NULL};
+static const char *filemancmd[] = { "pcmanfm", NULL };
+static const char *audiocmd[] = { "pavucontrol", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ NULL,                       	XK_Print,  spawn,          {.v = printcmd} },
 	{ MODKEY,                       XK_b,      spawn,          {.v = browsercmd} },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_e,      spawn,          {.v = filemancmd} },
+	{ MODKEY,                       XK_s,      spawn,          {.v = audiocmd} },
 	{ MODKEY,             		XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,		XK_j,      rotatestack,    {.i = +1 } },
+	{ MODKEY|ShiftMask,		XK_k,      rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_p,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
