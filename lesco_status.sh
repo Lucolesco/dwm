@@ -1,6 +1,6 @@
 #!/bin/sh
 sep='|'
-delay=15
+delay=2
 
 setstats()
 {
@@ -8,7 +8,9 @@ setstats()
 	weather=$(curl -s wttr.in/?format="%t")
 	memory=$(neofetch memory | cut -d ':' -f 2 | tr -d 'MiB')
 	memory=$(python -c "print(int($memory*100))")
-	stats="$sep 󰍛  $memory% $sep 󰖐   $weather $sep     $time $sep"
+	cpu_temp=$(sensors | grep Tctl | cut -d '+' -f 2)
+
+	stats="$sep 󰻠  $cpu_temp $sep 󰍛  $memory% $sep 󰖐   $weather $sep     $time $sep"
 
 	xsetroot -name "$stats"
 }
