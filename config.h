@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include "colors.h"
+
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 8;        /* gaps between windows */
@@ -17,12 +19,6 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#801618";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
-};
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -36,6 +32,7 @@ static const Rule rules[] = {
 	{ "Gimp",     	  NULL,       NULL,       0,            0,           -1 },
 	{ "Firefox",  	  NULL,       NULL,       1 << 8,       0,           -1 },
 	{ "Pavucontrol",  NULL,       NULL,       0,       	1,           -1 },
+	{ "Sxiv", 	  NULL,       NULL,       0,       	1,           -1 },
 };
 
 /* layout(s) */
@@ -63,7 +60,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
 static const char *printcmd[] = {"gscreenshot", "-c", "-s", NULL};
