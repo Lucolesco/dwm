@@ -60,12 +60,15 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, "-p", "Run: ", NULL };
+
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
 static const char *printcmd[] = {"gscreenshot", "-c", "-s", NULL};
 static const char *filemancmd[] = { "pcmanfm", NULL };
 static const char *audiocmd[] = { "pavucontrol", NULL };
+
+static const char *quitcmd[]  = { "pkill", "dwm", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -105,7 +108,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY,             XK_End,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_r,      quit,           {0} },
+	{ MODKEY,             		XK_End,    spawn,          {.v = quitcmd} },
 };
 
 /* button definitions */
