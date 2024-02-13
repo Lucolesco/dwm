@@ -1,5 +1,62 @@
---- dwm.c
-+++ dwm.c
+From 0cf9a007511f7dfd7dd94171b172562ebac9b6d5 Mon Sep 17 00:00:00 2001
+From: Tom Schwindl <schwindl@posteo.de>
+Date: Sat, 10 Sep 2022 12:51:09 +0200
+Subject: [PATCH] 6.3 swallow patch
+
+---
+ config.def.h |   9 +-
+ config.mk    |   3 +-
+ dwm.c        | 235 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 237 insertions(+), 10 deletions(-)
+
+diff --git a/config.def.h b/config.def.h
+index 061ad662f82a..0b2b8ffd30d5 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -3,6 +3,7 @@
+ /* appearance */
+ static const unsigned int borderpx  = 1;        /* border pixel of windows */
+ static const unsigned int snap      = 32;       /* snap pixel */
++static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
+ static const int showbar            = 1;        /* 0 means no bar */
+ static const int topbar             = 1;        /* 0 means bottom bar */
+ static const char *fonts[]          = { "monospace:size=10" };
+@@ -26,9 +27,11 @@ static const Rule rules[] = {
+ 	 *	WM_CLASS(STRING) = instance, class
+ 	 *	WM_NAME(STRING) = title
+ 	 */
+-	/* class      instance    title       tags mask     isfloating   monitor */
+-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
++	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
++	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
++	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
++	{ "St",      NULL,     NULL,           0,         0,          1,           0,        -1 },
++	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+ };
+ 
+ /* layout(s) */
+diff --git a/config.mk b/config.mk
+index 81c493ef4aff..52d1ebf30bec 100644
+--- a/config.mk
++++ b/config.mk
+@@ -20,10 +20,11 @@ FREETYPEINC = /usr/include/freetype2
+ # OpenBSD (uncomment)
+ #FREETYPEINC = ${X11INC}/freetype2
+ #MANPREFIX = ${PREFIX}/man
++#KVMLIB = -lkvm
+ 
+ # includes and libs
+ INCS = -I${X11INC} -I${FREETYPEINC}
+-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS}
++LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} -lX11-xcb -lxcb -lxcb-res ${KVMLIB}
+ 
+ # flags
+ CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}
+diff --git a/dwm.c b/dwm.c
+index e5efb6a22806..e68294b6b679 100644
+--- a/dwm.c
++++ b/dwm.c
 @@ -40,6 +40,12 @@
  #include <X11/extensions/Xinerama.h>
  #endif /* XINERAMA */
@@ -350,3 +407,6 @@
  		die("pledge");
  #endif /* __OpenBSD__ */
  	scan();
+-- 
+2.37.2
+

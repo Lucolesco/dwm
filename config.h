@@ -6,6 +6,7 @@
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int swallowfloating = 0;
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -28,11 +29,10 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class       	  instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     	  NULL,       NULL,       0,            0,           -1 },
-	{ "Firefox",  	  NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Pavucontrol",  NULL,       NULL,       0,       	1,           -1 },
-	{ "Sxiv", 	  NULL,       NULL,       0,       	1,           -1 },
+	/* class       	  instance    title       tags mask     isfloating   monitor    isterminal*/
+	{ "Pavucontrol",  NULL,       NULL,       0,       	1,           -1,	0 	},
+	{ "Nsxiv", 	  NULL,       NULL,       0,       	1,           -1,	0 	},
+	{ "Alacritty", 	  NULL,       NULL,       0,       	0,           -1, 	1 	},
 };
 
 /* layout(s) */
@@ -43,8 +43,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "󰖯",      tile },    /* first entry is default */
+	{ "",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
 
@@ -64,15 +64,14 @@ static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg,
 
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
-static const char *printcmd[] = {"gscreenshot", "-c", "-s", NULL};
+static const char *printcmd[] = {"scrot", "/home/luco/Images/Screenshots/%Y-%m-%d_$wx$h.png", "-f", "-s", "CAPTURE", NULL};
 static const char *filemancmd[] = { "pcmanfm", NULL };
 static const char *audiocmd[] = { "pavucontrol", NULL };
-
-static const char *quitcmd[]  = { "pkill", "dwm", NULL };
+static const char *lockcmd[] = { "i3lock", "-c", "000000", NULL};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ NULL,                       	XK_Print,  spawn,          {.v = printcmd} },
+	{ 0,                       	XK_Print,  spawn,          {.v = printcmd} },
 	{ MODKEY,                       XK_b,      spawn,          {.v = browsercmd} },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemancmd} },
@@ -108,8 +107,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_r,      quit,           {0} },
-	{ MODKEY,             		XK_End,    spawn,          {.v = quitcmd} },
+	{ MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockcmd} },
+	{ MODKEY,             		XK_End,    quit,           {0} },
 };
 
 /* button definitions */
