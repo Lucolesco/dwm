@@ -1,0 +1,8 @@
+#!/bin/sh
+
+choice=$(printf "󰍃  Logout\n󰚥  Shutdown\n󰜉  Reboot\n󰤄  Suspend" | dmenu -fn "$1" -nb "$2" -nf "$3" -sb "$4" -sf "$5" -l 4 -p "Power menu: " | sed -e 's/.\s//g')
+
+[ $choice = "Logout" ]   && pkill dwm 
+[ $choice = "Shutdown" ] && systemctl poweroff  
+[ $choice = "Reboot" ]   && systemctl reboot    
+[ $choice = "Suspend" ]  && i3lock -c "#000000" | sleep 1s | systemctl suspend	 

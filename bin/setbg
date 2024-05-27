@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; 
+then
+	printf "\nsetbg - sets background\n\nUsage:	setbg <background_image_path>\n\n"
+	exit 1
+fi
+
+rm ~/.config/wall.* 2&>1 /dev/null
+cp $1 ~/.config/wall.$(echo $1| grep "." | cut -d '.' -f 2) 
+
+#[ -e /usr/bin/swaybg ] && swaybg -i ~/.config/wall.*
+[ -e /usr/bin/xwallpaper ] && xwallpaper --stretch ~/.config/wall.* 
+
+if [ $? -eq 1 ];
+then
+	printf "\nERROR:	Invalid image's path.\n	($1) is not a valid image.\n\n"
+	exit 1
+fi
+
+printf "$1 was set as background successfully!\n\n"
+exit 0
+
