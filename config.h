@@ -4,7 +4,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
+static const unsigned int gappx     = 0;        /* gaps between windows */ 
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating = 0;
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -14,15 +14,25 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Nerd Hack Font:size=16" };
-static const char dmenufont[]       = "Nerd Hack Font:size=16";
+static const char *fonts[]          = { "Ubuntu Nerd Font:size=18" };
+static const char dmenufont[]       = "Ubuntu Nerd Font:size=18";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 
+static const char *const autostart[] = {
+	"dwmblocks", NULL,
+	"lxpolkit", NULL,
+	"udiskie", NULL,
+	"picom --no-fading-openclose --backend=glx --xrender-sync-fence", NULL,
+	"/home/lucas/.local/bin/setbg", "/home/lucas/Imagens/Wallpapers/wall.jpg" ,NULL,
+	"dunst", NULL,
+	"volumeicon", NULL
+};
+
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "1", "2", "3", "4", "5" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -30,9 +40,11 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class       	  instance    title       tags mask     isfloating   monitor    isterminal*/
-	{ "Pavucontrol",  NULL,       NULL,       0,       	1,           -1,	0 	},
-	{ "Nsxiv", 	  NULL,       NULL,       0,       	1,           -1,	0 	},
-	{ "Alacritty", 	  NULL,       NULL,       0,       	0,           -1, 	1 	},
+	{ "Pavucontrol",  			  NULL,       NULL,       0,       	1,           -1,	0 	},
+	{ "Nsxiv", 	      			  NULL,       NULL,       0,       	1,           -1,	0 	},
+	{ "Picture-in-picture", 	  NULL,       NULL,       0,       	1,           -1, 	0 	},
+	{ "Alacritty", 	  			  NULL,       NULL,       0,       	0,           -1, 	1 	},
+	{ "Mpv", 	  				  NULL,       NULL,       0,       	1,           -1, 	0 	},
 };
 
 /* layout(s) */
@@ -61,34 +73,35 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, "-p", "Run: ", NULL };
+static const char *powermenucmd[] = { "/home/lucas/.local/bin/powermenu", dmenufont, norm_bg, norm_fg, sel_bg, sel_fg, NULL };
 
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *browsercmd[]  = { "firefox", NULL };
-static const char *printcmd[] = {"scrot", "/home/luco/Images/Screenshots/%Y-%m-%d_$wx$h.png", "-f", "-s", "CAPTURE", NULL};
+static const char *browsercmd[]  = { "chromium", NULL };
+static const char *printcmd[] = {"scrot", "/home/lucas/Imagens/Screenshots/%Y-%m-%d_$wx$h.png", "-f", "-s", "CAPTURE", NULL};
 static const char *filemancmd[] = { "pcmanfm", NULL };
 static const char *audiocmd[] = { "pavucontrol", NULL };
 static const char *lockcmd[] = { "i3lock", "-c", "000000", NULL};
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ 0,                       	XK_Print,  spawn,          {.v = printcmd} },
+	{ 0,                       	    XK_Print,  spawn,          {.v = printcmd} },
 	{ MODKEY,                       XK_b,      spawn,          {.v = browsercmd} },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemancmd} },
 	{ MODKEY,                       XK_s,      spawn,          {.v = audiocmd} },
-	{ MODKEY,             		XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,             		    XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY|ShiftMask,		XK_j,      rotatestack,    {.i = +1 } },
-	{ MODKEY|ShiftMask,		XK_k,      rotatestack,    {.i = -1 } },
+	{ MODKEY|ShiftMask,		        XK_j,      rotatestack,    {.i = +1 } },
+	{ MODKEY|ShiftMask,				XK_k,      rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_p,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,	                XK_q,      killclient,     {0} },
+	{ MODKEY,	                	XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,	                XK_f,      togglefullscr,  {0} },
+	{ MODKEY,	                	XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -108,7 +121,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_l,      spawn,          {.v = lockcmd} },
-	{ MODKEY,             		XK_End,    quit,           {0} },
+	{ MODKEY,             		    XK_End,    spawn,          {.v = powermenucmd} },
 };
 
 /* button definitions */
