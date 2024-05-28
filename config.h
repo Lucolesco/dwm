@@ -26,7 +26,7 @@ static const char *const autostart[] = {
 	"lxpolkit", NULL,
 	"udiskie", NULL,
 	"picom --no-fading-openclose --backend=glx --xrender-sync-fence", NULL,
-	"/home/lucas/.local/bin/setbg", "/home/lucas/Imagens/Wallpapers/wall.jpg" ,NULL,
+	"lesco-autobg", NULL,
 	"dunst", NULL,
 	"volumeicon", NULL
 };
@@ -73,11 +73,11 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, "-p", "Run: ", NULL };
-static const char *powermenucmd[] = { "/home/lucas/.local/bin/powermenu", dmenufont, norm_bg, norm_fg, sel_bg, sel_fg, NULL };
+static const char *powermenucmd[] = { "lesco-powermenu", dmenufont, norm_bg, norm_fg, sel_bg, sel_fg, NULL };
 
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "chromium", NULL };
-static const char *printcmd[] = {"scrot", "/home/lucas/Imagens/Screenshots/%Y-%m-%d_$wx$h.png", "-f", "-s", "CAPTURE", NULL};
+static const char *printcmd[] = {"scrot", "${SCREENSHOTS}/%Y-%m-%d_$wx$h.png", "-f", "-s", NULL};
 static const char *filemancmd[] = { "pcmanfm", NULL };
 static const char *audiocmd[] = { "pavucontrol", NULL };
 static const char *lockcmd[] = { "i3lock", "-c", "000000", NULL};

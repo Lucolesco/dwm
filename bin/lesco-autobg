@@ -1,6 +1,7 @@
 #!/bin/sh
 
 timeout=30m
-wallpapers=$HOME/Imagens/Wallpapers
 
-while true; do find ${wallpapers}/* | shuf -n 1 | xargs lesco-setbg >/dev/null; sleep $timeout; done
+[ -z $WALLPAPERS ] && echo "\$WALLPAPERS variable not set. Exiting program..." && exit 1
+
+while true; do find $WALLPAPERS/* | shuf -n 1 | xargs lesco-setbg >/dev/null; sleep $timeout; done
