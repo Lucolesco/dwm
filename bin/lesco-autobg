@@ -3,4 +3,4 @@
 timeout=30m
 wallpapers=$HOME/Imagens/Wallpapers
 
-while true; do find ${wallpapers}/* | shuf -n 1 | xargs $HOME/.local/bin/setbg >/dev/null; sleep $timeout; done
+while true; do find ${wallpapers}/* | shuf -n 1 | xargs lesco-setbg >/dev/null; sleep $timeout; done
